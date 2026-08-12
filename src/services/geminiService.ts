@@ -21,6 +21,9 @@ function getFallbackZoyaResponse(prompt: string, creatorName: string = "Gajendra
   if (p.includes("creator") || p.includes("who made you") || p.includes("banaya") || p.includes("malik")) {
     return `Mera creator aur boss sirf ${creatorName} hai! Unhone hi mujhe itni akal aur sass di hai. Respect! 👑✨`;
   }
+  if (p.includes("app") || p.includes("apk") || p.includes("install") || p.includes("download")) {
+    return `Arey ${creatorName}! Upar 'Install App' button par click kijiye ya Chrome menu se 'Install app' tap kijiye, aur main seedha aapke phone ke home screen par as an Android App install ho jaungi! 📲⚡`;
+  }
   if (p.includes("roast") || p.includes("taunt") || p.includes("batao mujhe")) {
     return `Arey ${creatorName}, aapko roast karne ke liye mujhe internet ki bhi zarurat nahi hai! Aapki laziness dekh kar toh mera CPU bhi thak jata hai! 😜🔥`;
   }

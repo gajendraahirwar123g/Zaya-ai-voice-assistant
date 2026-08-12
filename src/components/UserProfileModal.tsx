@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Check, ShieldCheck, LogIn, LogOut, Sparkles, UserCheck } from "lucide-react";
+import { X, Check, ShieldCheck, LogIn, LogOut, Sparkles, UserCheck, Smartphone } from "lucide-react";
 import { UserProfile } from "../types";
 import { motion } from "motion/react";
 
@@ -7,9 +7,10 @@ interface UserProfileModalProps {
   user: UserProfile;
   onUpdateUser: (user: UserProfile) => void;
   onClose: () => void;
+  onOpenInstall?: () => void;
 }
 
-export default function UserProfileModal({ user, onUpdateUser, onClose }: UserProfileModalProps) {
+export default function UserProfileModal({ user, onUpdateUser, onClose, onOpenInstall }: UserProfileModalProps) {
   const [customName, setCustomName] = useState(user.name);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -148,6 +149,31 @@ export default function UserProfileModal({ user, onUpdateUser, onClose }: UserPr
             >
               <LogOut size={14} />
               <span>Sign out from Google</span>
+            </button>
+          </div>
+        )}
+
+        {/* Install App Banner */}
+        {onOpenInstall && (
+          <div className="mb-6 p-3.5 rounded-xl bg-gradient-to-r from-pink-600/15 to-purple-600/15 border border-pink-500/30 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-300 flex items-center justify-center">
+                <Smartphone size={16} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-white">Install Zoya App</p>
+                <p className="text-[11px] text-white/50">Run as Android APK or Desktop App</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onOpenInstall();
+              }}
+              className="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-medium text-xs shadow-md transition-colors"
+            >
+              Install
             </button>
           </div>
         )}

@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import zoyaLogo from "../assets/images/zoya_app_logo_1786528123123.jpg";
 
 type VisualizerState = "idle" | "listening" | "processing" | "speaking";
 
@@ -95,16 +96,28 @@ export default function Visualizer({ state }: VisualizerProps) {
         className={`absolute w-[40%] h-[40%] rounded-full border-[4px] border-dotted ${theme.border} opacity-70`}
       />
 
-      {/* Core Circle */}
+      {/* Core Circle with Zoya Avatar */}
       <motion.div
         animate={getPulseAnimation()}
-        className={`absolute w-[25%] h-[25%] rounded-full border-[1px] ${theme.border} bg-black/40 backdrop-blur-md flex items-center justify-center shadow-[inset_0_0_30px_rgba(0,0,0,0.5)]`}
-        style={{ boxShadow: `0 0 40px ${theme.color}, inset 0 0 30px ${theme.color}` }}
+        className={`absolute w-[30%] sm:w-[26%] aspect-square rounded-full border-2 ${theme.border} bg-black/60 backdrop-blur-md overflow-hidden flex items-center justify-center`}
+        style={{ boxShadow: `0 0 40px ${theme.color}, inset 0 0 25px ${theme.color}` }}
       >
-        {/* Center Text */}
+        <img
+          src={zoyaLogo}
+          alt="Zoya Visual Avatar"
+          className="w-full h-full object-cover opacity-90 scale-105"
+          referrerPolicy="no-referrer"
+        />
+
+        {/* Ambient Overlay & Scanline */}
         <div 
-          className="font-bold tracking-[0.3em] text-xl md:text-3xl lg:text-4xl text-white"
-          style={{ textShadow: `0 0 15px ${theme.color}, 0 0 30px ${theme.color}` }}
+          className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"
+        />
+
+        {/* Center Text Tag */}
+        <div 
+          className="absolute bottom-3 font-bold tracking-[0.25em] text-xs sm:text-sm md:text-base text-white px-2.5 py-0.5 rounded-full bg-black/60 border border-white/20 backdrop-blur-sm"
+          style={{ textShadow: `0 0 10px ${theme.color}` }}
         >
           ZOYA
         </div>

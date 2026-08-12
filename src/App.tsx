@@ -13,7 +13,9 @@ import {
   Flame,
   Laugh,
   HelpCircle,
-  Music
+  Music,
+  Smartphone,
+  Download
 } from "lucide-react";
 import { getZoyaResponse, getZoyaAudio, resetZoyaSession } from "./services/geminiService";
 import { processCommand } from "./services/commandService";
@@ -22,6 +24,7 @@ import Visualizer from "./components/Visualizer";
 import PermissionModal from "./components/PermissionModal";
 import ChatPanel from "./components/ChatPanel";
 import UserProfileModal from "./components/UserProfileModal";
+import InstallAppModal from "./components/InstallAppModal";
 import { playPCM, speakWithBrowserTTS } from "./utils/audioUtils";
 import { motion, AnimatePresence } from "motion/react";
 import { ChatMessage, AppState, UserProfile } from "./types";
@@ -32,6 +35,19 @@ export default function App() {
   const [viewMode, setViewMode] = useState<"orb" | "chat">("orb");
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
 
   // User Profile (Creator: Gajendra)
   const [user, setUser] = useState<UserProfile>(() => {
@@ -253,7 +269,16 @@ export default function App() {
         <UserProfileModal 
           user={user} 
           onUpdateUser={setUser} 
-          onClose={() => setShowProfileModal(false)} 
+          onClose={() => setShowProfileModal(false)}
+          onOpenInstall={() => setShowInstallModal(true)}
+        />
+      )}
+
+      {/* App Install / APK Modal */}
+      {showInstallModal && (
+        <InstallAppModal 
+          onClose={() => setShowInstallModal(false)}
+          deferredPrompt={deferredPrompt}
         />
       )}
 
@@ -339,6 +364,17 @@ export default function App() {
 
         {/* Right Header Actions */}
         <div className="flex items-center gap-2">
+          {/* Install App / APK Button */}
+          <button
+            id="header-install-app-btn"
+            onClick={() => setShowInstallModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 border border-pink-500/40 text-xs text-pink-300 font-medium transition-all shadow-md shadow-pink-500/10"
+            title="Install Zoya as Android / PC App"
+          >
+            <Smartphone size={13} className="text-pink-400" />
+            <span className="hidden sm:inline">Install App</span>
+          </button>
+
           {/* Mobile Chat Toggle */}
           <button
             id="header-chat-toggle-btn"
@@ -511,6 +547,14 @@ export default function App() {
           <footer className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-center pb-5 md:pb-7 z-20 shrink-0 gap-2.5 px-4">
             {/* Quick Action Chips directly on Orb view */}
             <div className="flex items-center gap-1.5 overflow-x-auto max-w-full px-2 py-1 scrollbar-hide">
+              <button
+                onClick={() => setShowInstallModal(true)}
+                className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 border border-pink-500/40 text-[11px] text-pink-300 font-medium transition-all whitespace-nowrap shadow-sm shadow-pink-500/10"
+              >
+                <Smartphone size={11} className="text-pink-400" />
+                <span>Install App</span>
+              </button>
+
               <button
                 onClick={() => handleSendMessage("Who created you Zoya?")}
                 className="flex items-center gap-1 px-3 py-1 rounded-full bg-white/[0.06] hover:bg-violet-600/25 border border-white/10 text-[11px] text-white/80 hover:text-white transition-all whitespace-nowrap"
