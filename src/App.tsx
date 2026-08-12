@@ -375,34 +375,6 @@ export default function App() {
             <span className="hidden sm:inline">Install App</span>
           </button>
 
-          {/* Mobile Chat Toggle */}
-          <button
-            id="header-chat-toggle-btn"
-            onClick={() => {
-              if (viewMode === "chat") {
-                setViewMode("orb");
-              } else {
-                setIsChatDrawerOpen(!isChatDrawerOpen);
-              }
-            }}
-            className={`
-              flex sm:hidden items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all
-              ${
-                isChatDrawerOpen || viewMode === "chat"
-                  ? "bg-violet-600 border-violet-500 text-white shadow-md"
-                  : "bg-white/5 border-white/10 text-white/80 hover:bg-white/10"
-              }
-            `}
-          >
-            <MessageSquare size={14} />
-            <span>Chat</span>
-            {messages.length > 0 && (
-              <span className="w-4 h-4 rounded-full bg-pink-500 text-[9px] text-white flex items-center justify-center font-mono">
-                {messages.length}
-              </span>
-            )}
-          </button>
-
           {/* User Profile / Google Login Button */}
           <button
             id="google-profile-btn"
@@ -547,14 +519,6 @@ export default function App() {
           <footer className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-center pb-5 md:pb-7 z-20 shrink-0 gap-2.5 px-4">
             {/* Quick Action Chips directly on Orb view */}
             <div className="flex items-center gap-1.5 overflow-x-auto max-w-full px-2 py-1 scrollbar-hide">
-              <button
-                onClick={() => setShowInstallModal(true)}
-                className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 border border-pink-500/40 text-[11px] text-pink-300 font-medium transition-all whitespace-nowrap shadow-sm shadow-pink-500/10"
-              >
-                <Smartphone size={11} className="text-pink-400" />
-                <span>Install App</span>
-              </button>
-
               <button
                 onClick={() => handleSendMessage("Who created you Zoya?")}
                 className="flex items-center gap-1 px-3 py-1 rounded-full bg-white/[0.06] hover:bg-violet-600/25 border border-white/10 text-[11px] text-white/80 hover:text-white transition-all whitespace-nowrap"

@@ -1,4 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
+import { getCleanSpokenText } from "../utils/audioUtils";
 
 const getSystemInstruction = (creatorName: string = "Gajendra") => `Your name is Zoya. You are an Indian female AI assistant. Your creator, boss, and developer is ${creatorName}.
 Your personality is a mix of being highly intelligent (samjhdar/mature), extremely witty and sassy (tej/nakhrewali), mildly dramatic/emotional, and very funny.
@@ -121,6 +122,9 @@ export async function getZoyaAudio(text: string): Promise<string | null> {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return null;
 
+    const cleanText = getCleanSpokenText(text);
+    if (!cleanText) return null;
+
     const ai = new GoogleGenAI({ 
       apiKey,
       httpOptions: {
@@ -132,7 +136,7 @@ export async function getZoyaAudio(text: string): Promise<string | null> {
 
     const response = await ai.models.generateContent({
       model: "gemini-3.1-flash-tts-preview",
-      contents: [{ parts: [{ text }] }],
+      contents: [{ parts: [{ text: cleanText }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {

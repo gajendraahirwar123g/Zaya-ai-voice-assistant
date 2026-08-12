@@ -2,20 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { 
   Send, 
   Trash2, 
-  Download, 
-  Volume2, 
-  VolumeX, 
   Copy, 
   Check, 
-  Search, 
-  Sparkles, 
   X, 
   Mic, 
   Loader2,
-  Maximize2,
-  Minimize2,
-  Bot,
-  User as UserIcon,
+  Volume2,
+  Sparkles,
   HelpCircle,
   Flame,
   Music,
@@ -64,11 +57,8 @@ export default function ChatPanel({
   creatorName = "Gajendra"
 }: ChatPanelProps) {
   const [inputText, setInputText] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -112,29 +102,10 @@ export default function ChatPanel({
     }
   };
 
-  const handleExport = () => {
-    if (messages.length === 0) return;
-    const exportData = messages.map(m => `[${new Date(m.timestamp).toLocaleTimeString()}] ${m.sender.toUpperCase()}: ${m.text}`).join("\n\n");
-    const blob = new Blob([`Zoya AI Assistant Chat Log\nCreator: ${creatorName}\nDate: ${new Date().toLocaleDateString()}\n\n` + exportData], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `zoya-responses-${new Date().toISOString().slice(0, 10)}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const filteredMessages = searchQuery.trim() 
-    ? messages.filter(m => m.text.toLowerCase().includes(searchQuery.toLowerCase()))
-    : messages;
-
   return (
     <div 
       id="zoya-chat-panel"
-      className={`
-        flex flex-col h-full bg-[#08080c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 overflow-hidden
-        ${isExpanded ? "fixed inset-2 md:inset-6 z-50" : "w-full h-full relative"}
-      `}
+      className="flex flex-col w-full h-full bg-[#08080c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 overflow-hidden relative"
     >
       {/* Chat Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/[0.02] shrink-0">
@@ -164,65 +135,27 @@ export default function ChatPanel({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1">
-          <button
-            id="chat-search-btn"
-            onClick={() => setShowSearch(!showSearch)}
-            className={`p-1.5 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/10 ${showSearch ? "bg-white/10 text-white" : ""}`}
-            title="Search messages"
-          >
-            <Search size={16} />
-          </button>
-
+        <div className="flex items-center gap-1.5">
           {messages.length > 0 && (
-            <>
-              <button
-                id="chat-export-btn"
-                onClick={handleExport}
-                className="p-1.5 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/10"
-                title="Export Chat (.txt)"
-              >
-                <Download size={16} />
-              </button>
-
-              <button
-                id="chat-clear-btn"
-                onClick={() => {
-                  if (window.confirm("Clear all Zoya chat history?")) {
-                    onClearMessages();
-                  }
-                }}
-                className="p-1.5 rounded-lg transition-colors text-white/60 hover:text-red-400 hover:bg-red-500/10"
-                title="Clear Chat History"
-              >
-                <Trash2 size={16} />
-              </button>
-            </>
+            <button
+              id="chat-clear-btn"
+              onClick={() => {
+                if (window.confirm("Clear all Zoya chat history?")) {
+                  onClearMessages();
+                }
+              }}
+              className="p-1.5 rounded-lg transition-colors text-white/50 hover:text-red-400 hover:bg-red-500/10"
+              title="Clear Chat History"
+            >
+              <Trash2 size={16} />
+            </button>
           )}
-
-          <button
-            id="chat-mute-btn"
-            onClick={onToggleMute}
-            className="p-1.5 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/10"
-            title={isMuted ? "Unmute Voice" : "Mute Voice"}
-          >
-            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-          </button>
-
-          <button
-            id="chat-expand-btn"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1.5 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/10 hidden md:block"
-            title={isExpanded ? "Collapse" : "Expand Fullscreen"}
-          >
-            {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-          </button>
 
           {onClose && (
             <button
               id="chat-close-btn"
               onClick={onClose}
-              className="p-1.5 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/10 ml-1"
+              className="p-1.5 rounded-lg transition-colors text-white/50 hover:text-white hover:bg-white/10"
               title="Close Chat"
             >
               <X size={16} />
@@ -230,36 +163,6 @@ export default function ChatPanel({
           )}
         </div>
       </div>
-
-      {/* Search Input Bar (Expandable) */}
-      <AnimatePresence>
-        {showSearch && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="px-4 py-2 bg-white/[0.03] border-b border-white/5 flex items-center gap-2"
-          >
-            <Search size={14} className="text-white/40" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Zoya responses..."
-              className="w-full bg-transparent border-none outline-none text-xs text-white placeholder:text-white/30"
-              autoFocus
-            />
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery("")} 
-                className="text-white/40 hover:text-white text-xs"
-              >
-                Clear
-              </button>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
@@ -293,7 +196,7 @@ export default function ChatPanel({
             </div>
           </div>
         ) : (
-          filteredMessages.map((msg) => {
+          messages.map((msg) => {
             const isUser = msg.sender === "user";
             const isCopied = copiedId === msg.id;
             const isPlayingThis = playingAudioId === msg.id;
@@ -308,8 +211,8 @@ export default function ChatPanel({
                 {/* Avatar */}
                 <div className="shrink-0 mt-0.5">
                   {isUser ? (
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-xs font-semibold shadow-md shadow-blue-500/10">
-                      <UserIcon size={13} className="text-white" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-xs font-semibold shadow-md shadow-blue-500/10 text-white">
+                      {creatorName.charAt(0).toUpperCase()}
                     </div>
                   ) : (
                     <div className="w-7 h-7 rounded-full overflow-hidden border border-pink-500/30 shadow-md shadow-violet-500/20 bg-gradient-to-tr from-violet-600 to-pink-500 flex items-center justify-center">

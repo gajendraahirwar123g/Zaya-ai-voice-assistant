@@ -226,20 +226,29 @@ export default function InstallAppModal({ onClose, deferredPrompt }: InstallAppM
           {activeTab === "apk" && (
             <div className="space-y-4">
               <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3">
-                <h4 className="font-semibold text-white text-sm flex items-center gap-2">
-                  <Download size={16} className="text-violet-400" />
-                  <span>PWABuilder se direct APK (.apk) download karein:</span>
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold text-white text-sm flex items-center gap-2">
+                    <Download size={16} className="text-violet-400" />
+                    <span>PWABuilder "Package For Stores" Guide</span>
+                  </h4>
+                  <span className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 text-[10px] border border-green-500/30">
+                    PWA Ready (100%)
+                  </span>
+                </div>
 
                 <p className="text-white/70 text-xs">
-                  Aap bina coding ke 1-minute mein Zoya ki installable <strong>.apk</strong> file generate kar sakte hain:
+                  Humne Service Worker aur standard 192px/512px store manifest set kar diya hai. Ab PWABuilder par error nahi aayega:
                 </p>
 
-                <ol className="space-y-2 text-white/80">
-                  <li>1. Niche diye button se <strong>PWABuilder.com</strong> open karein.</li>
-                  <li>2. Zoya ka link paste karke <strong>Start</strong> par click karein.</li>
-                  <li>3. <strong>Package for Android</strong> select karke <strong>Download APK</strong> par click karein!</li>
-                </ol>
+                <div className="bg-black/30 p-3 rounded-xl space-y-2 border border-white/5 text-white/80">
+                  <p className="font-medium text-violet-300">PWABuilder par step-by-step kaise karein:</p>
+                  <ol className="space-y-1.5 list-decimal list-inside pl-1 text-[11px] text-white/70">
+                    <li>Niche <strong>"Copy App Link"</strong> dabayein aur <strong>PWABuilder.com</strong> kholein.</li>
+                    <li>Link paste karke <strong>Start</strong> dabayein (Store audit score check karega).</li>
+                    <li><strong>"Package for Stores"</strong> (ya <strong>"Package for Android"</strong>) par click karein.</li>
+                    <li>Package Options mein <strong>"Generate"</strong> dabakar <strong>APK / ZIP</strong> download karein.</li>
+                  </ol>
+                </div>
 
                 <div className="pt-2 flex flex-wrap gap-2">
                   <a
@@ -248,7 +257,7 @@ export default function InstallAppModal({ onClose, deferredPrompt }: InstallAppM
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-medium text-xs transition-colors"
                   >
-                    <span>PWABuilder Kholo</span>
+                    <span>PWABuilder.com Kholo</span>
                     <ExternalLink size={13} />
                   </a>
 
@@ -259,6 +268,44 @@ export default function InstallAppModal({ onClose, deferredPrompt }: InstallAppM
                     {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} />}
                     <span>{copied ? "App Link Copied" : "Copy App Link"}</span>
                   </button>
+                </div>
+              </div>
+
+              {/* Instant Alternative Online APK Generators */}
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+                <h5 className="font-semibold text-white text-xs flex items-center gap-1.5 text-pink-400">
+                  <Sparkles size={13} />
+                  <span>Alternate Instant APK Tools (Agar PWABuilder me koi doubt ho):</span>
+                </h5>
+                <p className="text-white/60 text-[11px]">
+                  Aap in 1-click tools se bhi direct single-file APK bana sakte hain:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <a
+                    href="https://www.web2apk.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-between text-white text-xs transition-all"
+                  >
+                    <div>
+                      <p className="font-medium text-white/90">Web2APK</p>
+                      <p className="text-[10px] text-white/40">Direct APK Generator</p>
+                    </div>
+                    <ExternalLink size={12} className="text-white/40" />
+                  </a>
+
+                  <a
+                    href="https://appsgeyser.com/create-url-app/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-between text-white text-xs transition-all"
+                  >
+                    <div>
+                      <p className="font-medium text-white/90">AppsGeyser</p>
+                      <p className="text-[10px] text-white/40">Website to APK Maker</p>
+                    </div>
+                    <ExternalLink size={12} className="text-white/40" />
+                  </a>
                 </div>
               </div>
 
